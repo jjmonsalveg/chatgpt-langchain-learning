@@ -69,6 +69,17 @@ that you need to exit the shell and re-enter using the pipenv shell command.
 
 5. put a name in this case `PyCode`, and copy the key generated since this key will be lost and not shown again.
 
+## LangChain
+
+### Terminology
+
+| OpenAI Terminology  | LangChain Terminology |
+|---------------------|-----------------------|
+| System Message      | System Message        |
+| User Message        | Human Message         |
+| Assistant Message   | AI Message            |
+
 ## Links
 
 - [Discord comunnity](https://discord.gg/h2G3CbxPZA)
+- [Playground](https://platform.openai.com/playground)
