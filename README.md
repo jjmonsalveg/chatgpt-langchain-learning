@@ -69,6 +69,12 @@ that you need to exit the shell and re-enter using the pipenv shell command.
 
 5. put a name in this case `PyCode`, and copy the key generated since this key will be lost and not shown again.
 
+## Terminology
+
+Squared L2: Using the distance between two points to figure out how similar they are
+
+Cosine similarity: Using the angle between two vectors to figure out how similar they are
+
 ## LangChain
 
 ### Terminology
@@ -78,6 +84,23 @@ that you need to exit the shell and re-enter using the pipenv shell command.
 | System Message      | System Message        |
 | User Message        | Human Message         |
 | Assistant Message   | AI Message            |
+
+### File loaders by type
+
+Some of this loaders may need to install extra packages
+
+| File Type        | LangChain Loader Class        |
+|------------------|-------------------------------|
+| `facts.txt`      | `TextLoader`                  |
+| `report.pdf`     | `PyPDFLoader`                 |
+| `users.json`     | `JSONLoader`                  |
+| `blog.md`        | `UnstructuredMarkdownLoader`  |
+| assets buckets S3| `S3FileLoader`                |
+
+### Embeddings Models
+
+SentenceTransformer: all-mpnet-base-v2 768dimensions
+OpenAI Embeddings: 1536 dimensions
 
 ## Links
 
