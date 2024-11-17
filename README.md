@@ -1,9 +1,40 @@
 # Chatgpt and Langchain
 
-## Prerequisites
+## Index
+
+Listed in order of study and complexity
+
+- Simple examples:
+
+  - [Simple OpenApi call](/simple_examples/00-simple-api-call.py)
+  - [Creation of a chain](/simple_examples/01-simple-chain-args.py) with inputs/outputs and templates
+  - [Chain multiple chains](/simple_examples/02-multiple-chains.py) using `SequentialChain` to chain multiples `LLMChain`
+
+- Terminal Chat:
+  - [File history persistence](/tchat/00-file-history.py). Use a file to persist conversations. Using `FileChatMessageHistory`
+  - [Summary history](/tchat/01-summary-history.py), rather than persist all the
+  conversation keep only the summary to save money. Use of
+  `ConversationSummaryMemory`
+
+- Facts: Feed our conversation with some facts as input and save them in vector
+models after analysis and weighting(embeddings). The goal is:
+   1. Create embedding out of the user's question
+   2. Do a similarity search with our stored embeddings to find the ones most similar to the user's question
+   3. Put the most relevant 1-3 facts into the prompt along with the user's question
+  
+  The code:
+
+  - [Seed our database](/facts/playground.py), load the facts.txt and extract
+  chuncks to be weihgted(embeddings) and storage using
+  [chromadb](https://www.trychroma.com/) as vectorial database.
+  - [Consult database](/facts/prompt.py), create a retriver from our chroma
+  database and pass it to `RetrievalQA` in order to run a
+  chain(chat with model).
+
+## Requiriments
 
 1. If you have not already done so, create a pycode directory somewhere on your development machine.
-2. In your terminal run pip install pipenv or depending on your environment, 
+2. In your terminal run pip install pipenv or depending on your environment,
 
 ```shell
 pyenv install 3.11.10
@@ -77,13 +108,86 @@ Cosine similarity: Using the angle between two vectors to figure out how similar
 
 ## LangChain
 
+Library to provide interchangeable tools to automate each step of a text
+generation. Has tools for loading data, parsing it, storing it, querying it,
+passing it off to models like ChatGPT.
+Integrates with a ton of different services provided by a ton of different
+companies.
+
+(Relatively) easy to swap out providers. Don't want to use ChatGPT anymore? Swap in a different model in a few minutes
+
 ### Terminology
 
-| OpenAI Terminology  | LangChain Terminology |
-|---------------------|-----------------------|
-| System Message      | System Message        |
-| User Message        | Human Message         |
-| Assistant Message   | AI Message            |
+<!-- markdownlint-disable MD013 -->
+| **OpenAI Terminology** | **LangChain Terminology** | **Definition**                                                                                    |
+|------------------------|---------------------------|---------------------------------------------------------------------------------------------------|
+| System Message         | System Message            | A message that gives some initial directions to the chat model, usually produced by developers.   |
+| User Message           | Human Message             | A message produced by the user.                                                                   |
+| Assistant Message      | AI Message                | A message produced by the chat model.                                                             |
+<!-- markdownlint-enable MD013 -->
+
+- from langchain.llms import OpenAI
+give us an object that will use OpenApi's completion endpoint
+
+- from langchain.chat_models import ChatOpenAI
+give us an object that will use OpenApi's chat endpoint
+
+#### Retriever
+
+A retriever is an object that can take in a string and return some
+relevant documents. To be a "Retriever", the object must have a method called
+"get_relevant_documents" that takes a string and returns a list of documents
+
+```mermaid
+graph TD
+    A[What is an interesting fact about the English language?] --> B[Retriever]
+    B --> C[Document]
+    B --> D[Document]
+    B --> E[Document]
+```
+
+for example we did use chroma
+
+```mermaid
+classDiagram
+    class chroma {
+        similarity_search(string)
+        as_retriever()
+    }
+    class retriever {
+        get_relevant_documents(string)
+    }
+
+    chroma --> retriever
+    retriever --> chroma
+```
+
+#### Chain
+
+A Chain is an object that specifies the template, language model, output parser, memory, and callbacks to use for text generation.
+
+Why use Chains?
+
+- Chains allow us to easily configure different parts without changing a lot of code.
+
+- Multiple chains can also be connected together to create interesting and complex applications.
+
+Chain Components:
+
+- PromptTemplate to use The prompt format or structure that guides the model’s response.
+- Language model to use The specific AI model used for generating responses.
+- Output parser to use Processes and parses the output of the model.
+- Memory to use Stores and retrieves contextual information for the chain.
+- Callbacks to use Handles specific events or actions during the chain’s execution.
+
+```mermaid
+graph TD
+    A[Chain] --> B[PromptTemplate to use]
+    A --> C[Language model to use]
+    A --> D[Output parser to use]
+    A --> E[Memory to use]
+    A --> F[Callbacks to use]
+```
 
 ### File loaders by type
 
@@ -99,8 +203,13 @@ Some of this loaders may need to install extra packages
 
 ### Embeddings Models
 
-SentenceTransformer: all-mpnet-base-v2 768dimensions
-OpenAI Embeddings: 1536 dimensions
+An embedding is a list of numbers between -1 and 1 that score how much a piece
+of text is talking about some particular quality.
+An embedding is used to understand the goal of the users search (semantic search)
+
+- SentenceTransformer: all-mpnet-base-v2 768dimensions
+- OpenAI Embeddings: 1536 dimensions
+
 
 ## Links
 
