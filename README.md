@@ -117,11 +117,17 @@ pipenv install matplotlib
 
 ## Terminology
 
-Squared L2: Using the distance between two points to figure out how similar they are
+LLM = Large Language Model.  Algorithm that generates text
 
-Cosine similarity: Using the angle between two vectors to figure out how similar they are
+### LLM models
 
-## LangChain
+Completion model: Large Language Model that tries to add text onto the end of a
+prompt that you give it.
+
+Chat model: Large Language Model designed for back-and-forth conversational
+style text generation.
+
+### LangChain
 
 Library to provide interchangeable tools to automate each step of a text
 generation. Has tools for loading data, parsing it, storing it, querying it,
@@ -131,7 +137,10 @@ companies.
 
 (Relatively) easy to swap out providers. Don't want to use ChatGPT anymore? Swap in a different model in a few minutes
 
-### Terminology
+LangChain refers to completion-based models as 'LLM's
+LangChain refers to chat-based models as 'Chat Models'
+
+#### Terminology
 
 <!-- markdownlint-disable MD013 -->
 | **OpenAI Terminology** | **LangChain Terminology** | **Definition**                                                                                    |
@@ -176,6 +185,10 @@ classDiagram
     chroma --> retriever
     retriever --> chroma
 ```
+
+> [!NOTE]
+> To make a custom retriever, we can define a class that extends `BaseRetriever`.
+> Our retriever must define `get_relevant_documents` and `aget_relevant`
 
 #### Chain
 
@@ -223,9 +236,36 @@ of text is talking about some particular quality.
 An embedding is used to understand the goal of the users search (semantic search)
 
 - SentenceTransformer: all-mpnet-base-v2 768dimensions
-- OpenAI Embeddings: 1536 dimensions
+- OpenAI Embeddings: 1536 dimensions calculate embeddings manually, we can use
+the "embed_query" function (class `OpenAIEmbeddings)
+
+### Chroma Vector Database
+
+[chromadb](https://www.trychroma.com/) is a vectorial database that use
+SQLite.
+
+To find similar documents, we can use Chroma's `similarity_search()` function
+If you want to find similarities to an embedding you already calculated, you can
+use the `similarity_search_by_vector` function instead
+
+Chroma can remove duplicates for us automatically using the
+`max_marginal relevance_search_by_vector`
+
+### Glosary
+
+Vector database: Special database made for storing embeddings
+
+### Glossary
+
+**Vector database:** Special database made for storing embeddings
+
+**Similarity:**
+
+- **Squared L2:** Using the distance between two points to figure out how similar they are
+- **Cosine similarity:** Using the angle between two vectors to figure out how similar they are
 
 ## Links
 
 - [Discord comunnity](https://discord.gg/h2G3CbxPZA)
 - [Playground](https://platform.openai.com/playground)
+- [Json schema generator](transform.tools/json-to-json-schema)
