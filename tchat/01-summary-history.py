@@ -1,13 +1,12 @@
-from tabnanny import verbose
 from dotenv import load_dotenv
-from langchain.chat_models import ChatOpenAI
 from langchain import LLMChain
+from langchain.chat_models import ChatOpenAI
+from langchain.memory import ConversationSummaryMemory
 from langchain.prompts import (
-    HumanMessagePromptTemplate,
     ChatPromptTemplate,
+    HumanMessagePromptTemplate,
     MessagesPlaceholder,
 )
-from langchain.memory import ConversationSummaryMemory
 
 load_dotenv()
 

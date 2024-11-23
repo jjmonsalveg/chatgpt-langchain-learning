@@ -27,9 +27,16 @@ models after analysis and weighting(embeddings). The goal is:
   - [Seed our database](/facts/playground.py), load the facts.txt and extract
   chuncks to be weihgted(embeddings) and storage using
   [chromadb](https://www.trychroma.com/) as vectorial database.
-  - [Consult database](/facts/prompt.py), create a retriver from our chroma
+  - [Consult database](/facts/prompt_no_duplicates.py), create a retriver from our chroma
   database and pass it to `RetrievalQA` in order to run a
-  chain(chat with model).
+  chain(chat with model). Also it was created a `RedundantFilterRetriever` that
+  avoids duplicated embeddings.
+  - Created different chain types to feed our `RetrievalQA`:
+        - [Map Reduce](/facts/prompt_map_reduce.py)
+        - [Map Re-rank](/facts/prompt_map_rerank.py)
+        - [Refine](/facts/prompt_refine.py)
+        - [Stuff](/facts/prompt_stuff.py)
+  - [Visualization](/facts/scores.ipynb): Draw a chart to see embeddings with a jupyter notebook.
 
 ## Requiriments
 
@@ -87,6 +94,14 @@ python main.py
 
 7. If you make any changes to your environment variables or keys, you may find
 that you need to exit the shell and re-enter using the pipenv shell command.
+
+## How to install a new python library
+
+Run the following command
+
+```shell
+pipenv install matplotlib
+```
 
 ## Obtaining API Key
 
@@ -209,7 +224,6 @@ An embedding is used to understand the goal of the users search (semantic search
 
 - SentenceTransformer: all-mpnet-base-v2 768dimensions
 - OpenAI Embeddings: 1536 dimensions
-
 
 ## Links
 
