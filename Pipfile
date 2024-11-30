@@ -10,6 +10,7 @@ python-dotenv = "==1.0.0"
 tiktoken = "*"
 chromadb = "*"
 matplotlib = "*"
+pyboxen = "*"
 
 [dev-packages]
 ipykernel = "*"

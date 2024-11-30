@@ -1,4 +1,4 @@
-# Chatgpt and Langchain
+# ChatGPT and LangChain
 
 ## Index
 
@@ -21,7 +21,7 @@ models after analysis and weighting(embeddings). The goal is:
    1. Create embedding out of the user's question
    2. Do a similarity search with our stored embeddings to find the ones most similar to the user's question
    3. Put the most relevant 1-3 facts into the prompt along with the user's question
-  
+
   The code:
 
   - [Seed our database](/facts/playground.py), load the facts.txt and extract
@@ -37,6 +37,25 @@ models after analysis and weighting(embeddings). The goal is:
         - [Refine](/facts/prompt_refine.py)
         - [Stuff](/facts/prompt_stuff.py)
   - [Visualization](/facts/scores.ipynb): Draw a chart to see embeddings with a jupyter notebook.
+
+- [Agents](/agents/main.py): Create an agent that receives a tool, this tool
+    can create sql queries to be executed by sqlite database. In main file
+    we are going to see the complete solutions.
+  - Folders:
+    - [tools](/agents/tools/sql.py): we define methods and tools to be used by chatGPT
+    - [handlers](/agents/handlers/chat_model_start_handler.py): handlers of
+      langchain events.
+  - Partial solution's Code:
+    - [No database schema](/agents/without_database_schema.py): This code
+        allow ChatGpt to guess about our schema but this is prone to errors.
+    - [Html report one call](/agents/html_report_without_memory.py): This code
+    pass through the database tables and their schema, and whenever the database
+    response will be printed in an html file. [example of html](/agents/top_5_popular_products_report.html).
+    - [Html report multiple calls](/agents/html_report_with_memory.py): This
+    code calls chatGPT using memory between call, in this case two reports are
+    generated.
+      - [User report](/agents/users_report.html)
+      - [Orders report](/agents/orders_report.html)
 
 ## Requiriments
 
@@ -156,6 +175,46 @@ give us an object that will use OpenApi's completion endpoint
 - from langchain.chat_models import ChatOpenAI
 give us an object that will use OpenApi's chat endpoint
 
+#### Input variables
+
+These variables together form the backbone of an LLMChain, enabling dynamic and
+context-aware interactions with a large language model. Each element contributes
+to enhancing the versatility and coherence of responses in conversational or
+task-specific workflows.
+
+1. HumanMessagePromptTemplate:
+
+- Purpose: Defines how the prompt or message from a human (user input) is
+structured. It acts as a blueprint for dynamically generating human-readable
+prompts.
+
+- Usage: To standardize or customize user inputs before being passed to the language model.
+
+2. ConversationBufferMemory:
+
+- Purpose: Maintains a memory of the ongoing conversation by storing previous
+messages and responses in a buffer.
+
+- Usage: Useful for keeping context across multiple exchanges in conversational
+applications, ensuring the AI’s responses are coherent and aligned with the
+previous dialogue.
+
+3. MessagesPlaceholder:
+
+- Purpose: Represents placeholders for dynamic content that gets injected into
+the conversation, such as variables or runtime-generated messages.
+
+- Usage: Facilitates flexibility in prompt design by allowing dynamic insertion
+of variables, making the chain reusable in various scenarios.
+
+4. ChatPromptTemplate:
+
+- Purpose: Combines multiple prompt components into a single structured template
+designed for chat-based interactions.
+
+- Usage: Ensures that both user input and system messages are formatted
+consistently, providing a unified structure for the language model to process.
+
 #### Retriever
 
 A retriever is an object that can take in a string and return some
@@ -217,7 +276,7 @@ graph TD
     A --> F[Callbacks to use]
 ```
 
-### File loaders by type
+#### File loaders by type
 
 Some of this loaders may need to install extra packages
 
@@ -229,7 +288,7 @@ Some of this loaders may need to install extra packages
 | `blog.md`        | `UnstructuredMarkdownLoader`  |
 | assets buckets S3| `S3FileLoader`                |
 
-### Embeddings Models
+#### Embeddings Models
 
 An embedding is a list of numbers between -1 and 1 that score how much a piece
 of text is talking about some particular quality.
@@ -238,6 +297,89 @@ An embedding is used to understand the goal of the users search (semantic search
 - SentenceTransformer: all-mpnet-base-v2 768dimensions
 - OpenAI Embeddings: 1536 dimensions calculate embeddings manually, we can use
 the "embed_query" function (class `OpenAIEmbeddings)
+
+#### Events
+
+An event in this context refers to a specific occurrence or callback in the
+system where a function is triggered during the execution of a machine learning
+model, tool, chain, or agent process. These events help track and respond to
+various stages of execution, such as starting, ending, generating tokens, or
+encountering errors.
+
+<table border="1">
+  <tr>
+    <th>Object</th>
+    <th>Possible Event</th>
+    <th>Possible Event</th>
+    <th>Possible Event</th>
+    <th>Possible Event</th>
+  </tr>
+  <tr>
+    <td rowspan="2">LLM's</td>
+    <td>on_llm_start()</td>
+    <td>on_llm_new_token()</td>
+    <td>on_llm_end()</td>
+    <td>on_llm_error()</td>
+  </tr>
+  <tr>
+    <td>Called when LLM starts running</td>
+    <td>Called when the model receives a token in stream mode</td>
+    <td>Called when model is done</td>
+    <td>Called when an error occurs</td>
+  </tr>
+  <tr>
+    <td rowspan="2">Chat Models</td>
+    <td>on_chat_model_start()</td>
+    <td>on_llm_new_token()</td>
+    <td>on_llm_end()</td>
+    <td>on_llm_error()</td>
+  </tr>
+  <tr>
+    <td>Called when chat model starts running</td>
+    <td>Called when the model receives a token in stream mode</td>
+    <td>Called when model is done</td>
+    <td>Called when an error occurs</td>
+  </tr>
+  <tr>
+    <td rowspan="2">Tools</td>
+    <td>on_tool_start()</td>
+    <td>on_tool_end()</td>
+    <td>on_tool_error()</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Called when the tool starts</td>
+    <td>Called when tool is done</td>
+    <td>Called when tool errors</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td rowspan="2">Chains</td>
+    <td>on_chain_start()</td>
+    <td>on_chain_end()</td>
+    <td>on_chain_error()</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Called when chain starts</td>
+    <td>Called when chain is done</td>
+    <td>Called when chain has an error</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td rowspan="2">Agents</td>
+    <td>on_agent_action()</td>
+    <td>on_agent_finish()</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Called when the agent receives a message</td>
+    <td>Called when the agent is done</td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
 ### Chroma Vector Database
 
@@ -251,11 +393,7 @@ use the `similarity_search_by_vector` function instead
 Chroma can remove duplicates for us automatically using the
 `max_marginal relevance_search_by_vector`
 
-### Glosary
-
-Vector database: Special database made for storing embeddings
-
-### Glossary
+## Glossary
 
 **Vector database:** Special database made for storing embeddings
 
