@@ -8,7 +8,7 @@ load_dotenv()
 embeddings = OpenAIEmbeddings()
 
 # this calculate some embeddings using openAI
-emb =embeddings.embed_query("hi there")
+emb = embeddings.embed_query("hi there")
 
 text_splitter = CharacterTextSplitter(
     separator="\n",
@@ -17,9 +17,7 @@ text_splitter = CharacterTextSplitter(
 )
 
 loader = TextLoader("facts.txt")
-docs = loader.load_and_split(
-    text_splitter=text_splitter
-)
+docs = loader.load_and_split(text_splitter=text_splitter)
 
 # reach openAI with docs
 db = Chroma.from_documents(docs, embeddings, persist_directory="emb")

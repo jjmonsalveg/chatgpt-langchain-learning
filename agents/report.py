@@ -12,7 +12,7 @@ class WriteReportArgsSchema(BaseModel):
     html: str
 
 
-# We use StructuredTool because admit multiple parameters
+# We use StructuredTool because admits multiple parameters
 write_report_tool = StructuredTool.from_function(
     name="write_report",
     description="Write an HTML file to disk. Use this tool whenever someone ask for a report.",

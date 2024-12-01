@@ -1,5 +1,4 @@
 import langchain
-from click import prompt
 from dotenv import load_dotenv
 from langchain.agents import AgentExecutor, OpenAIFunctionsAgent
 from langchain.chat_models import ChatOpenAI
@@ -9,9 +8,8 @@ from langchain.prompts import (
     MessagesPlaceholder,
 )
 from langchain.schema import SystemMessage
-
-from tools.sql import describe_tables_tool, run_query_tool, tables
 from report import write_report_tool
+from tools.sql import describe_tables_tool, run_query_tool, tables
 
 load_dotenv()
 langchain.debug = True
@@ -450,6 +448,3 @@ agent_executor.run(
 # {
 #   "output": "The top 5 most popular products have been summarized and written to a report file. You can download the report file [here](sandbox:/top_5_popular_products_report.html)."
 # }
-
-
-

@@ -7,7 +7,6 @@ from langchain.prompts import (
     HumanMessagePromptTemplate,
     MessagesPlaceholder,
 )
-
 from tools.sql import run_query_tool
 
 load_dotenv()

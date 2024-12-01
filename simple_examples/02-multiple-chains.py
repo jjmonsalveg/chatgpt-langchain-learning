@@ -35,7 +35,7 @@ chain = SequentialChain(
     output_variables=["code", "test"],
 )
 
-result = chain({"language": args.language, "task":args.task})
+result = chain({"language": args.language, "task": args.task})
 
 print(">>>>> Generated code:")
 print(result["code"])

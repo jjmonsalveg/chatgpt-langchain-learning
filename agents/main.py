@@ -1,27 +1,21 @@
-from gc import callbacks
-from operator import call
-from xml.sax import handler
-import langchain
-from click import prompt
 from dotenv import load_dotenv
+from handlers.chat_model_start_handler import ChatModelStartHandler
 from langchain.agents import AgentExecutor, OpenAIFunctionsAgent
-from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import ChatOpenAI
+from langchain.memory import ConversationBufferMemory
 from langchain.prompts import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
     MessagesPlaceholder,
 )
 from langchain.schema import SystemMessage
-
-from tools.sql import describe_tables_tool, run_query_tool, tables
 from report import write_report_tool
-from handlers.chat_model_start_handler import ChatModelStartHandler
+from tools.sql import describe_tables_tool, run_query_tool, tables
 
 load_dotenv()
 # langchain.debug = True
 
-handler=ChatModelStartHandler()
+handler = ChatModelStartHandler()
 chat = ChatOpenAI(callbacks=[handler])
 tables = tables()
 prompt = ChatPromptTemplate(
@@ -43,9 +37,7 @@ prompt = ChatPromptTemplate(
 )
 
 # return_messages return the result as string
-memory = ConversationBufferMemory(
-    memory_key="chat_history", return_messages=True
-)
+memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 tools = [run_query_tool, describe_tables_tool, write_report_tool]
 agent = OpenAIFunctionsAgent(
     llm=chat,
@@ -53,22 +45,13 @@ agent = OpenAIFunctionsAgent(
     tools=tools,
 )
 
-agent_executor = AgentExecutor(
-    agent=agent,
-    verbose=True,
-    tools=tools,
-    memory=memory
-)
+agent_executor = AgentExecutor(agent=agent, verbose=True, tools=tools, memory=memory)
 
 # agent_executor.run("How many users have provided a shipping address?")
 # agent_executor.run("How many users are in the database?")
-agent_executor.run(
-    "How many orders are there? Write the result to an html report."
-)
+agent_executor.run("How many orders are there? Write the result to an html report.")
 
-agent_executor.run(
-    "Repeat the exact same process for users"
-)
+agent_executor.run("Repeat the exact same process for users")
 
 # output before adding pyboxen:
 # > Entering new AgentExecutor chain...

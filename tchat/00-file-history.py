@@ -14,7 +14,9 @@ chat = ChatOpenAI()
 
 # return_messages creates objects to save the results
 memory = ConversationBufferMemory(
-    chat_memory=FileChatMessageHistory("messages.json"), # persistence in secondary memory
+    chat_memory=FileChatMessageHistory(
+        "messages.json"
+    ),  # persistence in secondary memory
     memory_key="messages",
     return_messages=True,
 )

@@ -49,10 +49,10 @@ models after analysis and weighting(embeddings). The goal is:
     - [No database schema](/agents/without_database_schema.py): This code
         allow ChatGpt to guess about our schema but this is prone to errors.
     - [Html report one call](/agents/html_report_without_memory.py): This code
-    pass through the database tables and their schema, and whenever the database
-    response will be printed in an html file. [example of html](/agents/top_5_popular_products_report.html).
+    pass through the database tables and their schema, and whatever the database
+    respond will be printed in an html file. [example of html](/agents/top_5_popular_products_report.html).
     - [Html report multiple calls](/agents/html_report_with_memory.py): This
-    code calls chatGPT using memory between call, in this case two reports are
+    code calls chatGPT using memory between calls, in this case two reports are
     generated.
       - [User report](/agents/users_report.html)
       - [Orders report](/agents/orders_report.html)
@@ -132,7 +132,7 @@ pipenv install matplotlib
 
 4. Click in `Create new secret key`
 
-5. put a name in this case `PyCode`, and copy the key generated since this key will be lost and not shown again.
+5. Put a name in this case `PyCode`, and copy the key generated since this key will be lost and not shown again.
 
 ## Terminology
 
@@ -169,10 +169,10 @@ LangChain refers to chat-based models as 'Chat Models'
 | Assistant Message      | AI Message                | A message produced by the chat model.                                                             |
 <!-- markdownlint-enable MD013 -->
 
-- from langchain.llms import OpenAI
+- from `langchain.llms` import OpenAI
 give us an object that will use OpenApi's completion endpoint
 
-- from langchain.chat_models import ChatOpenAI
+- from `langchain.chat_models` import ChatOpenAI
 give us an object that will use OpenApi's chat endpoint
 
 #### Input variables
