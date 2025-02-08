@@ -6,16 +6,18 @@ Listed in order of study and complexity
 
 - Simple examples:
 
-  - [Simple OpenApi call](/simple_examples/00-simple-api-call.py)
-  - [Creation of a chain](/simple_examples/01-simple-chain-args.py) with inputs/outputs and templates
-  - [Chain multiple chains](/simple_examples/02-multiple-chains.py) using `SequentialChain` to chain multiples `LLMChain`
+  - [Simple OpenApi call](./simple_examples/00-simple-api-call.py)
+  - [Creation of a chain](./simple_examples/01-simple-chain-args.py) with
+    inputs/outputs and templates
+  - [Chain multiple chains](./simple_examples/02-multiple-chains.py) using
+    `SequentialChain` to chain multiples `LLMChain`
 
 - Terminal Chat:
 
-  - [File history persistence](/tchat/00-file-history.py). Use a file to
+  - [File history persistence](./tchat/00-file-history.py). Use a file to
     persist conversations. Using `FileChatMessageHistory`
-  - [Summary history](/tchat/01-summary-history.py), rather than persist all the
-    conversation keep only the summary to save money. Use of
+  - [Summary history](./tchat/01-summary-history.py), rather than persist all
+    the conversation keep only the summary to save money. Use of
     `ConversationSummaryMemory`
 
 - Facts: Feed our conversation with some facts as input and save them in vector
@@ -24,46 +26,50 @@ Listed in order of study and complexity
   1. Create embedding out of the user's question
   2. Do a similarity search with our stored embeddings to find the ones most
      similar to the user's question
-  3. Put the most relevant 1-3 facts into the prompt along with the user's question
+  3. Put the most relevant 1-3 facts into the prompt along with the user's
+     question
 
   The code:
 
-  - [Seed our database](/facts/playground.py), load the facts.txt and extract
+  - [Seed our database](./facts/playground.py), load the facts.txt and extract
     chuncks to be weihgted(embeddings) and storage using
     [chromadb](https://www.trychroma.com/) as vectorial database.
-  - [Consult database](/facts/prompt_no_duplicates.py), create a retriver from our chroma
-    database and pass it to `RetrievalQA` in order to run a
-    chain(chat with model). Also it was created a `RedundantFilterRetriever` that
-    avoids duplicated embeddings.
+  - [Consult database](./facts/prompt_no_duplicates.py), create a retriver from
+    our chroma database and pass it to `RetrievalQA` in order to run a chain(chat
+    with model). Also it was created a `RedundantFilterRetriever` that avoids
+    duplicated embeddings.
   - Created different chain types to feed our `RetrievalQA`:
-    - [Map Reduce](/facts/prompt_map_reduce.py)
-    - [Map Re-rank](/facts/prompt_map_rerank.py)
-    - [Refine](/facts/prompt_refine.py)
-    - [Stuff](/facts/prompt_stuff.py)
-  - [Visualization](/facts/scores.ipynb): Draw a chart to see embeddings with a jupyter notebook.
+    - [Map Reduce](./facts/prompt_map_reduce.py)
+    - [Map Re-rank](./facts/prompt_map_rerank.py)
+    - [Refine](./facts/prompt_refine.py)
+    - [Stuff](./facts/prompt_stuff.py)
+  - [Visualization](/facts/scores.ipynb): Draw a chart to see embeddings with a
+    jupyter notebook.
 
-- [Agents](/agents/main.py): Create an agent that receives a tool, this tool
-  can create sql queries to be executed by sqlite database. In main file
-  we are going to see the complete solutions.
+- [Agents](./agents/main.py): Create an agent that receives a tool, this tool
+  can create sql queries to be executed by sqlite database. In main file we are
+  going to see the complete solutions.
 
   - Folders:
-    - [tools](/agents/tools/sql.py): we define methods and tools to be used by chatGPT
-    - [handlers](/agents/handlers/chat_model_start_handler.py): handlers of
+    - [tools](./agents/tools/sql.py): we define methods and tools to be used by
+      chatGPT
+    - [handlers](./agents/handlers/chat_model_start_handler.py): handlers of
       langchain events.
   - Partial solution's Code:
-    - [No database schema](/agents/without_database_schema.py): This code
-      allow ChatGpt to guess about our schema but this is prone to errors.
-    - [Html report one call](/agents/html_report_without_memory.py): This code
+    - [No database schema](./agents/without_database_schema.py): This code allow
+      ChatGpt to guess about our schema but this is prone to errors.
+    - [Html report one call](./agents/html_report_without_memory.py): This code
       pass through the database tables and their schema, and whatever the database
-      respond will be printed in an html file. [example of html](/agents/top_5_popular_products_report.html).
-    - [Html report multiple calls](/agents/html_report_with_memory.py): This
+      respond will be printed in an html file. [example of
+      html](/agents/top_5_popular_products_report.html).
+    - [Html report multiple calls](./agents/html_report_with_memory.py): This
       code calls chatGPT using memory between calls, in this case two reports are
       generated.
-      - [User report](/agents/users_report.html)
-      - [Orders report](/agents/orders_report.html)
+      - [User report](./agents/users_report.html)
+      - [Orders report](./agents/orders_report.html)
 
-- [PDF project](https://github.com/jjmonsalveg/langchain-pdf) In this project, we
-  set up a frontend project that allows you to sign in, upload a pdf, and chat
+- [PDF project](https://github.com/jjmonsalveg/langchain-pdf) In this project,
+  we set up a frontend project that allows you to sign in, upload a pdf, and chat
   with a chatbot that uses the pdf as a context. We downloaded the other
   repository and configured it accordingly. (github Fork)
 
@@ -71,28 +77,27 @@ Listed in order of study and complexity
     - `app.chat`: Module of focus we built some functions
       - `build_chat`: This function will be used by `app.web` to create a chat
         with the pdf context.
-      - `create_embeddings_for_pdf`: receives the pdf id and pdf path
-        this method divide the pdf in chunck and calculate the embeddings.
+      - `create_embeddings_for_pdf`: receives the pdf id and pdf path this
+        method divide the pdf in chunck and calculate the embeddings.
       - These functions will be use by `app.web`
         - `score_conversation`
         - `get_scores`
-    - `app.web`: This module was already built and it is not the focus of the exercise
-      we're going to use `set_conversation_components`,
+    - `app.web`: This module was already built and it is not the focus of the
+      exercise we're going to use `set_conversation_components`,
       `get_conversation_components`, `add_message_to_conversation`,
       `get_messages_by_conversation_id` methods in `app.chat`
     - `app.embeddings`: New Open API embeddings
     - `app.vector_stores`: New pinecone client
-    - [PDF Uploader Project](https://www.udemy.com/course/chatgpt-and-langchain-the-complete-developers-masterclass/learn/lecture/40667588#overview):
+    - [PDF Uploader
+      Project](https://www.udemy.com/course/chatgpt-and-langchain-the-complete-developers-masterclass/learn/lecture/40667588#overview):
       This step is optional since the service is already running.
   - Configuration:
 
-    - [Redis install](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-mac-os/):
+    - [Redis
+      install](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-mac-os/):
       in case you need to kill the redis server use
 
-      ```shell
-      sudo lsof -i :6379
-      kill -9 <process-id>
-      ```
+      `shell sudo lsof -i :6379 kill -9 <process-id> `
 
     - Set the `REDIS_URI=redis://localhost:6379` in your `.env`
     - Download the PDF project and configure flask aplication following README.
@@ -100,10 +105,11 @@ Listed in order of study and complexity
       configure locally(We used the creator server)
     - Create a Pinecone account, copy the `API_KEY` in the `.env`, go to
       `Database>Indexes` and create a new `docs` index with 1,536
-      dimensions.(remember this is because we use OpenAI Embeddings)
-      You don't need to change anything just accept as it is.
-      Update the values of index name and region in `.env`
-    - Follow [this](https://www.udemy.com/course/chatgpt-and-langchain-the-complete-developers-masterclass/learn/lecture/43330040#overview)
+      dimensions.(remember this is because we use OpenAI Embeddings) You don't
+      need to change anything just accept as it is. Update the values of index
+      name and region in `.env`
+    - Follow
+      [this](https://www.udemy.com/course/chatgpt-and-langchain-the-complete-developers-masterclass/learn/lecture/43330040#overview)
       in order to update to new Pinecone Client implementation.
     - In the `.env` we found a problem `PINECONE_ENV_NAME` and other `PINECONE`
       variables are blank all the time causing errors we just substitute the
@@ -178,13 +184,16 @@ pipenv install matplotlib
 
 1. Open your browser and navigate to https://platform.openai.com/
 
-2. Create an OpenAI account by logging in with an existing provider or by creating an account with your email address.
+2. Create an OpenAI account by logging in with an existing provider or by
+   creating an account with your email address.
 
-3. In the top menu click on `Dashboard` and then in the left menu click on `Api Keys`
+3. In the top menu click on `Dashboard` and then in the left menu click on
+   `Api Keys`
 
 4. Click in `Create new secret key`
 
-5. Put a name in this case `PyCode`, and copy the key generated since this key will be lost and not shown again.
+5. Put a name in this case `PyCode`, and copy the key generated since this key
+   will be lost and not shown again.
 
 ## Terminology
 
@@ -206,7 +215,8 @@ passing it off to models like ChatGPT.
 Integrates with a ton of different services provided by a ton of different
 companies.
 
-(Relatively) easy to swap out providers. Don't want to use ChatGPT anymore? Swap in a different model in a few minutes
+(Relatively) easy to swap out providers. Don't want to use ChatGPT anymore? Swap
+in a different model in a few minutes
 
 LangChain refers to completion-based models as 'LLM's
 LangChain refers to chat-based models as 'Chat Models'
@@ -242,7 +252,8 @@ task-specific workflows.
   structured. It acts as a blueprint for dynamically generating human-readable
   prompts.
 
-- Usage: To standardize or customize user inputs before being passed to the language model.
+- Usage: To standardize or customize user inputs before being passed to the
+  language model.
 
 2. ConversationBufferMemory:
 
@@ -301,25 +312,31 @@ classDiagram
 
 > [!NOTE]
 > To make a custom retriever, we can define a class that extends `BaseRetriever`.
-> Our retriever must define `get_relevant_documents` and `aget_relevant`
+> Our retriever must define `get_relevant_documents` and
+> `aget_relevant_documents`
 
 #### Chain
 
-A Chain is an object that specifies the template, language model, output parser, memory, and callbacks to use for text generation.
+A Chain is an object that specifies the template, language model, output parser,
+memory, and callbacks to use for text generation.
 
 Why use Chains?
 
-- Chains allow us to easily configure different parts without changing a lot of code.
+- Chains allow us to easily configure different parts without changing a lot of
+  code.
 
-- Multiple chains can also be connected together to create interesting and complex applications.
+- Multiple chains can also be connected together to create interesting and
+  complex applications.
 
 Chain Components:
 
-- PromptTemplate to use The prompt format or structure that guides the model’s response.
+- PromptTemplate to use The prompt format or structure that guides the model’s
+  response.
 - Language model to use The specific AI model used for generating responses.
 - Output parser to use Processes and parses the output of the model.
 - Memory to use Stores and retrieves contextual information for the chain.
-- Callbacks to use Handles specific events or actions during the chain’s execution.
+- Callbacks to use Handles specific events or actions during the chain’s
+  execution.
 
 ```mermaid
 graph TD
@@ -350,7 +367,7 @@ An embedding is used to understand the goal of the users search (semantic search
 
 - SentenceTransformer: all-mpnet-base-v2 768dimensions
 - OpenAI Embeddings: 1536 dimensions calculate embeddings manually, we can use
-  the "embed_query" function (class `OpenAIEmbeddings)
+  the "embed_query" function (class `OpenAIEmbeddings`)
 
 #### Events
 
@@ -437,8 +454,7 @@ encountering errors.
 
 ### Chroma Vector Database
 
-[chromadb](https://www.trychroma.com/) is a vectorial database that use
-SQLite.
+[chromadb](https://www.trychroma.com/) is a vectorial database that use SQLite.
 
 To find similar documents, we can use Chroma's `similarity_search()` function
 If you want to find similarities to an embedding you already calculated, you can
@@ -453,8 +469,10 @@ Chroma can remove duplicates for us automatically using the
 
 **Similarity:**
 
-- **Squared L2:** Using the distance between two points to figure out how similar they are
-- **Cosine similarity:** Using the angle between two vectors to figure out how similar they are
+- **Squared L2:** Using the distance between two points to figure out how
+  similar they are
+- **Cosine similarity:** Using the angle between two vectors to figure out how
+  similar they are
 
 ## Links
 
