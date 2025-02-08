@@ -19,6 +19,7 @@ handler = ChatModelStartHandler()
 chat = ChatOpenAI(callbacks=[handler])
 tables = tables()
 prompt = ChatPromptTemplate(
+    input_variables=["input"],
     messages=[
         SystemMessage(
             content=(
@@ -33,7 +34,7 @@ prompt = ChatPromptTemplate(
         HumanMessagePromptTemplate.from_template("{input}"),
         # This is by convention and we need it. (Similar to memory)
         MessagesPlaceholder(variable_name="agent_scratchpad"),
-    ]
+    ],
 )
 
 # return_messages return the result as string

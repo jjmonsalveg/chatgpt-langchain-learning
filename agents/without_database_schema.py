@@ -13,11 +13,12 @@ load_dotenv()
 
 chat = ChatOpenAI()
 prompt = ChatPromptTemplate(
+    input_variables=["input"],
     messages=[
         HumanMessagePromptTemplate.from_template("{input}"),
         # This is by convention and we need it. (Similar to memory)
         MessagesPlaceholder(variable_name="agent_scratchpad"),
-    ]
+    ],
 )
 
 tools = [run_query_tool]

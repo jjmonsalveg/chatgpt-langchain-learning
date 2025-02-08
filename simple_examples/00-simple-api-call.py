@@ -1,14 +1,7 @@
-import argparse
 import os
 
 from dotenv import load_dotenv
 from langchain.llms import OpenAI
-
-parser = argparse.ArgumentParser()
-parser.add_argument("--task", default="Return a list of numbers")
-parser.add_argument("--language", default="python")
-
-args = parser.parse_args()
 
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
